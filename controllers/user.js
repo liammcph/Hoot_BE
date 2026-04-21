@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/user");
 
-// Index GET /users -> Return All User
 router.get("/", async (req, res) => {
   try {
     const users = await User.find({}, "username");
@@ -11,8 +10,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// My Profile Route AKA user show route
-// users/me
+
 router.get("/me", async (req, res) => {
   try {
     const user = await User.findById(req.user._id);

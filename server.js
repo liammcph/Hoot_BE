@@ -15,12 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(logger('dev'));
 
-// Routes go here
-app.use('/test-jwt', testController)
+// Routes
 app.use('/auth', authController)
-// Any Routes below this verify token you must be logged in
-// AKA - the authorization header
-app.use(verifyJwt) 
+
+app.use(verifyJwt)  // Authorization check
 app.use('/users', userController)
 
 app.listen(3000, () => {
