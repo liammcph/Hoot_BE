@@ -1,5 +1,5 @@
 const express = require("express");
-const verifyToken = require("../middleware/verify-token.js");
+const verifyJwt = require("../middlewares/verify-jwt.js");
 const Hoot = require("../models/hoot.js");
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 
 // POST /hoots
 
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", verifyJwt, async (req, res) => {
   try {
     req.body.author = req.user._id;
     const hoot = await Hoot.create(req.body);
@@ -23,7 +23,7 @@ router.post("/", verifyToken, async (req, res) => {
 
 // controllers/hoots.js
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", verifyJwt, async (req, res) => {
   try {
     const hoots = await Hoot.find({})
       .populate("author")
@@ -36,7 +36,7 @@ router.get("/", verifyToken, async (req, res) => {
 
 // GET /hoots/:hootId
 
-router.get("/:hootId", verifyToken, async (req, res) => {
+router.get("/:hootId", verifyJwt, async (req, res) => {
   try {
     const hoot = await Hoot.findById(req.params.hootId).populate("author");
     res.status(200).json(hoot);
@@ -46,7 +46,7 @@ router.get("/:hootId", verifyToken, async (req, res) => {
 });
 
 // DELETE /hoots/:hootId
-router.delete("/:hootId", verifyToken, async (req, res) => {
+router.delete("/:hootId", verifyJwt, async (req, res) => {
   try {
     const hoot = await Hoot.findById(req.params.hootId);
 
@@ -62,7 +62,7 @@ router.delete("/:hootId", verifyToken, async (req, res) => {
 });
 
 // PUT /hoots/:hootId
-router.put("/:hootId", verifyToken, async (req, res) => {
+router.put("/:hootId", verifyJwt, async (req, res) => {
   try {
     // Find the hoot:
     const hoot = await Hoot.findById(req.params.hootId);
@@ -90,7 +90,7 @@ router.put("/:hootId", verifyToken, async (req, res) => {
 });
 
 // POST /hoots/:hootId/comments
-router.post("/:hootId/comments", verifyToken, async (req, res) => {
+router.post("/:hootId/comments", verifyJwt, async (req, res) => {
   try {
     req.body.author = req.user._id;
     const hoot = await Hoot.findById(req.params.hootId);
@@ -110,7 +110,7 @@ router.post("/:hootId/comments", verifyToken, async (req, res) => {
 });
 
 // PUT /hoots/:hootId/comments/:commentId
-router.put("/:hootId/comments/:commentId", verifyToken, async (req, res) => {
+router.put("/:hootId/comments/:commentId", verifyJwt, async (req, res) => {
   try {
     const hoot = await Hoot.findById(req.params.hootId);
     const comment = hoot.comments.id(req.params.commentId);
@@ -131,7 +131,7 @@ router.put("/:hootId/comments/:commentId", verifyToken, async (req, res) => {
 });
 
 // DELETE /hoots/:hootId/comments/:commentId
-router.delete("/:hootId/comments/:commentId", verifyToken, async (req, res) => {
+router.delete("/:hootId/comments/:commentId", verifyJwt, async (req, res) => {
   try {
     const hoot = await Hoot.findById(req.params.hootId);
     const comment = hoot.comments.id(req.params.commentId);
